@@ -1,89 +1,155 @@
 # Internship Form Portal
 
-A web application built with Flask that allows companies to fill out internship recommendation forms online. The system stores the completed forms in a SQLite database and offers a print-friendly view so that users can easily save or print the form.
-
----
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Features](#features)
-- [Tech Stack](#tech-stack)
-- [Setup and Installation](#setup-and-installation)
-- [Project Structure](#project-structure)
-- [Usage](#usage)
-- [Deployment](#deployment)
-- [Future Enhancements](#future-enhancements)
-- [License](#license)
-- [Author](#author)
-
----
+A Flask-based web application for companies to fill out, save, print, and submit internship recommendation forms that can later be displayed to students.
 
 ## Overview
 
-The Internship Form Portal is designed to simplify the internship recommendation process by replacing non-interactive PDF or image-based forms. Instead, companies can fill out a dynamic web form that is stored in a database and can be printed or saved as a PDF directly from the browser. This project is the first step in a broader initiative that will later include a student portal to review submitted forms.
+The Internship Form Portal allows companies to:
 
----
+- Complete an interactive internship recommendation form online
+- Print the form for record keeping
+- Submit the form to be stored in a database
+- View previously submitted forms
 
-## Features
+Students can:
 
-- **Interactive Internship Form:**  
-  Companies can fill out a form with fields like company name, contact person, role, fax number, and proposed internship topic.
-
-- **Form Validation:**  
-  Uses client-side (JavaScript) and server-side (Flask) validation to ensure accurate data entry.
-
-- **Print-Friendly and PDF Ready:**  
-  Dedicated CSS styling for printing ensures a clean layout. PDF generation can be added using libraries like jsPDF/html2pdf.js for client-side conversion.
-
-- **Data Persistence:**  
-  Completed forms are saved in a SQLite database for easy retrieval and later display on a student-facing website.
-
-- **Simple & Extendable:**  
-  The codebase is structured to allow rapid development and easy future extensions (e.g., authentication, email notifications).
-
----
+- Browse available internship opportunities
+- Filter and search for internships by company, title, or description
+- View detailed information about each internship
 
 ## Tech Stack
 
-- **Backend:**  
-  Flask (Python)  
-  _Provides an easy-to-use, lightweight framework to build and manage web applications._
+- **Backend**: Flask (Python)
+- **Database**: SQLite (via SQLAlchemy ORM)
+- **Form Handling**: Flask-WTF (WTForms)
+- **Frontend**: HTML, CSS, JavaScript
+- **Testing**: Pytest
 
-- **Database:**  
-  SQLite  
-  _Ideal for small to medium-sized applications and the easiest to implement in a Flask setup._
+## Features
 
-- **Frontend:**  
-  HTML, CSS, and JavaScript  
-  _Uses standard web technologies to create a responsive and interactive user interface._
+- Interactive form with validation
+- Print-friendly styling for physical copies
+- Responsive design for mobile and desktop use
+- Searchable internship listings
+- Clean, modern UI with accessible design
 
-- **Form Handling:**  
-  Flask-WTF (WTForms)  
-  _Simplifies form creation and validation._
-
-- **PDF Generation (Optional):**  
-  jsPDF / html2pdf.js (client-side integration)  
-  _Allows users to generate PDFs from the rendered form._
-
-- **Deployment:**  
-  The application is designed to be deployed on a VPS using production servers such as Gunicorn behind an Nginx reverse proxy.
-
----
-
-## Setup and Installation
+## Installation and Setup
 
 ### Prerequisites
 
-- Python 3.7 or above
-- pip (Python package installer)
-- Git (optional, for cloning the repository)
+- Python 3.8 or higher
+- pip (Python package manager)
 
-### Step-by-Step Installation
+### Installation Steps
 
-1. **Clone the Repository**
+1. Clone the repository:
 
-   ```bash
+   ```
    git clone https://github.com/yourusername/internship-form-portal.git
    cd internship-form-portal
    ```
+
+2. Create and activate a virtual environment:
+
+   ```
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
+
+3. Install dependencies:
+
+   ```
+   pip install -r requirements.txt
+   ```
+
+4. Set up environment variables (optional):
+
+   ```
+   export FLASK_ENV=development  # On Windows: set FLASK_ENV=development
+   export SECRET_KEY=your_secret_key  # For production
+   ```
+
+5. Initialize the database:
+
+   ```
+   flask shell
+   >>> from app import create_app
+   >>> from models import db
+   >>> app = create_app()
+   >>> with app.app_context():
+   >>>     db.create_all()
+   >>> exit()
+   ```
+
+6. Run the application:
+
+   ```
+   python app.py
+   ```
+
+7. Open your browser and navigate to `http://localhost:5000`
+
+## Project Structure
+
+```
+internship-form-portal/
+├── app.py                  # Application entry point
+├── config.py               # Configuration settings
+├── models.py               # Database models
+├── forms.py                # Form definitions
+├── requirements.txt        # Python dependencies
+├── README.md               # This file
+├── static/                 # Static assets
+│   ├── css/
+│   │   └── style.css       # Main stylesheet
+│   ├── js/
+│   │   └── scripts.js      # Client-side JavaScript
+│   └── images/             # Image assets
+├── templates/              # HTML templates
+│   ├── base.html           # Base template
+│   ├── form.html           # Internship form
+│   └── list_forms.html     # Form listings
+└── tests/                  # Test files
+    └── test_app.py         # Application tests
+```
+
+## Usage
+
+### For Companies
+
+1. Navigate to the home page to access the internship form
+2. Fill out all required fields with your company and internship details
+3. Use the "Print Form" button to get a physical copy if needed
+4. Submit the form to save it to the database
+5. Receive a confirmation with a link to view your submitted form
+
+### For Students
+
+1. Navigate to the "View Forms" page to see all internship opportunities
+2. Use the search box to filter by company name, internship title, or description
+3. Click on an internship card to view detailed information
+4. Use the provided contact information to apply directly to the company
+
+## Development
+
+### Running Tests
+
+```
+pytest tests/
+```
+
+### Adding New Features
+
+1. Create a new branch: `git checkout -b feature/your-feature-name`
+2. Implement your feature
+3. Run tests to ensure everything works: `pytest`
+4. Submit a pull request
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Acknowledgements
+
+- Flask and its extensions for the excellent web framework
+- Contributors and maintainers of the project
