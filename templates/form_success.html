@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="success-container">
+    <div class="success-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+        </svg>
+    </div>
+    
+    <h2 class="success-title">Form Submitted Successfully!</h2>
+    
+    <div class="success-message">
+        <p>Thank you for submitting an internship opportunity. Your form has been received and will be made available to students after review.</p>
+        
+        <div class="submission-details">
+            <div class="detail-item">
+                <span class="detail-label">Company:</span>
+                <span class="detail-value">{{ form.company_name }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Internship Title:</span>
+                <span class="detail-value">{{ form.internship_title }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Submission Date:</span>
+                <span class="detail-value">{{ form.created_at.strftime('%d %B %Y, %H:%M') }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Submission ID:</span>
+                <span class="detail-value">{{ form.id }}</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="success-actions">
+        <a href="{{ url_for('view_form', form_id=form.id) }}" class="btn btn-primary">View Submitted Form</a>
+        <a href="{{ url_for('index') }}" class="btn btn-outline">Submit Another Form</a>
+        <button type="button" class="btn btn-secondary" onclick="window.print()">Print Confirmation</button>
+    </div>
+    
+    <div class="next-steps">
+        <h3>What's Next?</h3>
+        <ol>
+            <li>Our team will review your submission.</li>
+            <li>Once approved, your internship opportunity will be visible to students.</li>
+            <li>You can view or print your submission at any time using the link above.</li>
+            <li>If you need to make changes, please contact our support team.</li>
+        </ol>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Auto-scroll to the top of the page for better user experience
+    window.scrollTo(0, 0);
+</script>
+{% endblock %} 

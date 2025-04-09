@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="error-container">
+    <div class="error-code">500</div>
+    <h2 class="error-title">Internal Server Error</h2>
+    
+    <div class="error-message">
+        <p>Something went wrong on our end. We're working to fix the issue.</p>
+        <p>Please try again in a few moments or contact support if the problem persists.</p>
+    </div>
+    
+    <div class="error-actions">
+        <a href="{{ url_for('index') }}" class="btn btn-primary">Go to Home Page</a>
+        <button class="btn btn-outline" onclick="window.location.reload()">Try Again</button>
+    </div>
+</div>
+{% endblock %} 
