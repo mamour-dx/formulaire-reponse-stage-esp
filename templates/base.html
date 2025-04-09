@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{{ title if title else 'Internship Form Portal' }}{% endblock %}</title>
+    
+    <!-- Link to the CSS file for styling -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    <!-- Additional metatags for better SEO and accessibility -->
+    <meta name="description" content="Internship Form Portal - Submit and manage internship opportunities">
+    <meta name="author" content="Internship Form Portal Team">
+    
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <!-- Header section with site navigation -->
+    <header class="site-header">
+        <div class="container">
+            <div class="header-logo">
+                <h1>Internship Form Portal</h1>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="{{ url_for('index') }}">Submit Form</a></li>
+                    <li><a href="{{ url_for('list_forms') }}">View Forms</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- Main content section -->
+    <main class="site-content">
+        <div class="container">
+            <!-- Flash messages for user feedback -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for category, message in messages %}
+                            <div class="flash-message flash-{{ category }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+            
+            <!-- The main content block to be filled by child templates -->
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+    
+    <!-- Footer section -->
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; {{ now.year }} Internship Form Portal. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Contact Us</a>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Scripts at the end of the body for better page loading performance -->
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+    
+    <!-- Additional scripts block for child templates -->
+    {% block scripts %}{% endblock %}
+</body>
+</html> 

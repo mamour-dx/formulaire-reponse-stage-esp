@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+
+{% block extra_head %}
+    <!-- Additional CSS for print formatting -->
+    <style>
+        @media print {
+            .no-print {
+                display: none;
+            }
+            .section {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<div class="form-view-container">
+    <div class="form-view-header">
+        <h2>{{ form.internship_title }}</h2>
+        <div class="form-view-company">{{ form.company_name }}</div>
+        <div class="form-view-meta">
+            <span class="form-view-date">Posted: {{ form.created_at.strftime('%d %B %Y') }}</span>
+            {% if form.is_approved %}
+                <span class="form-view-status approved">Approved</span>
+            {% else %}
+                <span class="form-view-status pending">Pending Approval</span>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="form-view-actions no-print">
+        <button type="button" class="btn btn-secondary" onclick="window.print()">Print This Internship</button>
+        <a href="{{ url_for('list_forms') }}" class="btn btn-outline">Back to List</a>
+    </div>
+    
+    <div class="form-view-content">
+        <!-- Company Section -->
+        <section class="section company-section">
+            <h3>Company Information</h3>
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="info-label">Company Name:</span>
+                    <span class="info-value">{{ form.company_name }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Address:</span>
+                    <span class="info-value">{{ form.company_address }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">City:</span>
+                    <span class="info-value">{{ form.company_city }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Postal Code:</span>
+                    <span class="info-value">{{ form.company_postal_code }}</span>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Contact Section -->
+        <section class="section contact-section">
+            <h3>Contact Information</h3>
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="info-label">Contact Person:</span>
+                    <span class="info-value">{{ form.contact_name }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Position:</span>
+                    <span class="info-value">{{ form.contact_position }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Email:</span>
+                    <span class="info-value">
+                        <a href="mailto:{{ form.contact_email }}">{{ form.contact_email }}</a>
+                    </span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Phone:</span>
+                    <span class="info-value">{{ form.contact_phone }}</span>
+                </div>
+                {% if form.contact_fax %}
+                <div class="info-item">
+                    <span class="info-label">Fax:</span>
+                    <span class="info-value">{{ form.contact_fax }}</span>
+                </div>
+                {% endif %}
+            </div>
+        </section>
+        
+        <!-- Internship Details Section -->
+        <section class="section internship-section">
+            <h3>Internship Details</h3>
+            
+            <div class="internship-title-section">
+                <h4>{{ form.internship_title }}</h4>
+                
+                <div class="internship-meta">
+                    {% if form.internship_start_date %}
+                    <div class="internship-meta-item">
+                        <span class="meta-label">Start Date:</span>
+                        <span class="meta-value">{{ form.internship_start_date.strftime('%d %B %Y') }}</span>
+                    </div>
+                    {% endif %}
+                    
+                    {% if form.internship_duration %}
+                    <div class="internship-meta-item">
+                        <span class="meta-label">Duration:</span>
+                        <span class="meta-value">{{ form.internship_duration }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="internship-description">
+                <h5>Description</h5>
+                <div class="description-content">
+                    {{ form.internship_description|nl2br }}
+                </div>
+            </div>
+            
+            {% if form.internship_requirements %}
+            <div class="internship-requirements">
+                <h5>Requirements</h5>
+                <div class="requirements-content">
+                    {{ form.internship_requirements|nl2br }}
+                </div>
+            </div>
+            {% endif %}
+        </section>
+        
+        <!-- Application Section -->
+        <section class="section application-section no-print">
+            <h3>How to Apply</h3>
+            <p>
+                If you are interested in this internship opportunity, please contact 
+                <strong>{{ form.contact_name }}</strong> at 
+                <a href="mailto:{{ form.contact_email }}">{{ form.contact_email }}</a> 
+                or by phone at {{ form.contact_phone }}.
+            </p>
+            <p>
+                When applying, please mention that you found this opportunity through the 
+                Internship Form Portal.
+            </p>
+        </section>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Add any form-view specific JavaScript here
+    document.addEventListener('DOMContentLoaded', function() {
+        // For example, tracking views or adding interactive elements
+    });
+</script>
+{% endblock %} 
