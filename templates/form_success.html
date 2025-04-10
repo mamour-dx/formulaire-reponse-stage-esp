@@ -36,8 +36,17 @@
     
     <div class="success-actions">
         <a href="{{ url_for('view_form', form_id=form.id) }}" class="btn btn-primary">View Submitted Form</a>
+        {% if pdf_filename %}
+        <a href="{{ url_for('download_pdf', form_id=form.id) }}" class="btn btn-primary btn-download">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            Download PDF Form
+        </a>
+        {% endif %}
         <a href="{{ url_for('index') }}" class="btn btn-outline">Submit Another Form</a>
-        <button type="button" class="btn btn-secondary" onclick="window.print()">Print Confirmation</button>
     </div>
     
     <div class="next-steps">
@@ -46,6 +55,9 @@
             <li>Our team will review your submission.</li>
             <li>Once approved, your internship opportunity will be visible to students.</li>
             <li>You can view or print your submission at any time using the link above.</li>
+            {% if pdf_filename %}
+            <li>You can download the filled PDF version of your form for your records.</li>
+            {% endif %}
             <li>If you need to make changes, please contact our support team.</li>
         </ol>
     </div>
