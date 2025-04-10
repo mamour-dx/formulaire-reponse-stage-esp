@@ -1,0 +1,117 @@
+# .cursorrules
+# ========================================================
+# Project: Internship Form Portal (Flask-based)
+#
+# Overview:
+# The Internship Form Portal is a web application built using Flask. 
+# It allows companies to fill out an interactive internship recommendation form 
+# that can be saved, printed, or later displayed to students via a separate portal.
+#
+# The application uses SQLite as the database for simplicity.
+# Frontend enhancements (including print-friendly styles and optional PDF generation)
+# are handled by HTML/CSS/JavaScript. Forms are managed using Flask-WTF (WTForms),
+# and ORM is provided by SQLAlchemy.
+#
+# This file details the file and folder architecture, explaining the purpose of each 
+# file/folder, design decisions, and future extension possibilities.
+# ========================================================
+
+# Root Directory:
+# -----------------------------------------------------------------------------
+# internship-form-portal/
+#
+# ├── .cursorrules         # (This file) Contains detailed project architecture and implementation guidelines.
+# ├── README.md            # Project documentation including setup instructions, tech stack, features, usage, and deployment.
+# ├── requirements.txt     # List of Python dependencies (Flask, Flask-WTF, SQLAlchemy, etc.)
+# ├── config.py            # Application configuration (secret key, database URI, debug mode, etc.)
+# ├── app.py               # Application entry point; initializes Flask app, loads configuration, registers blueprints, and routes.
+# ├── models.py            # Contains SQLAlchemy ORM models; defines database schema for form submissions.
+# ├── forms.py             # Contains Flask-WTF form definitions used for the interactive internship form.
+#
+# -----------------------------------------------------------------------------
+# Static Assets:
+#
+# ├── static/
+# │   ├── css/
+# │   │   └── style.css    # Main CSS file including global styles and @media print rules for a clean print layout.
+# │   ├── js/
+# │   │   └── scripts.js   # JavaScript file(s) for client-side functionalities such as form validation,
+# │   │                      dynamic interactions, and (optionally) client-side PDF generation integration.
+# │   └── images/          # (Optional) Directory to store logos, icons, or other static image assets.
+#
+# -----------------------------------------------------------------------------
+# HTML Templates:
+#
+# ├── templates/
+# │   ├── base.html        # Base Jinja2 template that contains common HTML elements (header, footer, navbar).
+# │   ├── form.html        # Template for displaying the internship form; extends base.html.
+# │   └── list_forms.html  # Template for displaying a list of submitted forms for student view or administrative purposes.
+#
+# -----------------------------------------------------------------------------
+# Tests:
+#
+# ├── tests/
+# │   └── test_app.py      # Unit and integration tests for ensuring proper function of form submission,
+# │                          database interactions, and route responses.
+#
+# -----------------------------------------------------------------------------
+# Documentation:
+#
+# ├── docs/                # (Optional) Additional documentation (design decisions, API specifications,
+# │                          developer guidelines) for deeper insights or future enhancements.
+#
+# -----------------------------------------------------------------------------
+# Detailed Implementation Notes:
+#
+# 1. Configuration (config.py):
+#    - Contains settings such as SECRET_KEY, DATABASE_URI (pointing to a SQLite file),
+#      DEBUG mode, and any other environment-specific configurations.
+#    - Encouraged to support different environments (development, production) via multiple config classes.
+#
+# 2. Application Initialization (app.py):
+#    - Initializes the Flask instance.
+#    - Loads configuration from config.py.
+#    - Sets up the SQLAlchemy database connection.
+#    - Registers any blueprints (if application grows into several modules).
+#    - Defines the primary routes (e.g., root for the form and /forms for listing submissions).
+#
+# 3. Models (models.py):
+#    - Define a Model (e.g., "InternshipForm") with fields matching the form inputs (company name,
+#      contact person, role, fax number, proposed internship topic, etc.).
+#    - Use SQLAlchemy to map these models to a SQLite database.
+#
+# 4. Forms (forms.py):
+#    - Use Flask-WTF to define a WTForm class for the internship form.
+#    - Add appropriate fields (StringField, SelectField, TextAreaField, etc.) along with validation rules.
+#    - Consider CSRF protection provided by Flask-WTF.
+#
+# 5. Templates (templates/):
+#    - base.html: Provides the skeleton for the web pages (head section, shared header/footer, linking CSS/JS).
+#    - form.html: Embeds the internship form into a user-friendly interface. Utilizes WTForm rendering to
+#      ensure proper display and error messages.
+#    - list_forms.html: Lists all submitted forms from the database and prepares them for presentation in a student view.
+#
+# 6. Static Files (static/):
+#    - style.css: Includes both the styling for the visual theme and a section for print-specific CSS:
+#         - @media print rules to optimize the printed output.
+#    - scripts.js: Enhances user interactivity on the form page and may implement functions for PDF generation.
+#
+# 7. Testing (tests/):
+#    - Write unit tests for the critical parts of the application:
+#         - Form validation and submission routes.
+#         - Database model methods.
+#         - Error handling and edge cases.
+#
+# 8. Deployment Considerations:
+#    - Prepare the production server using a WSGI server like Gunicorn to run the Flask app.
+#    - Use Nginx or Apache as a reverse proxy and for serving static files.
+#    - Include process monitoring (e.g., Supervisor or systemd) to ensure high availability.
+#
+# 9. Future Extensions:
+#    - Email Handling: Although not needed now, the architecture should allow integration of an email module.
+#    - Authentication: Implement a login system for company representatives if required later.
+#    - API Development: Consider building RESTful endpoints to support a separate student portal.
+#    - Migration Tools: Integrate Flask-Migrate for handling database schema changes as the project scales.
+#
+# ========================================================
+# End of .cursorrules
