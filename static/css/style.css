@@ -588,27 +588,56 @@ h3 {
   display: flex;
   align-items: center;
   border: 1px solid #ccc;
-  padding: 5px;
-  background-color: #f0f8ff;
+  padding: 0;
+  background-color: white;
+  margin-bottom: 15px;
+  width: 100%;
+}
+
+.student-row label:first-child {
+  padding: 5px 10px;
+  white-space: nowrap;
+  font-weight: normal;
 }
 
 .student-fields {
   display: flex;
   flex: 1;
+  border-left: 1px solid #ccc;
+  background-color: #f0f8ff;
 }
 
 .student-item {
   flex: 1;
-  padding: 0 5px;
+  padding: 0;
+  position: relative;
+  display: flex;
+  align-items: center;
 }
 
 .student-item:first-child {
   border-right: 1px solid #ccc;
 }
 
+.student-item label {
+  padding: 5px 10px;
+  white-space: nowrap;
+  font-weight: normal;
+}
+
+.student-item input {
+  flex: 1;
+  border: none;
+  background-color: #f0f8ff;
+  height: 100%;
+  min-height: 30px;
+  padding: 5px;
+}
+
 /* Department table */
 .department-table {
-  margin: 15px 0;
+  margin: 0 0 15px 0;
+  width: 100%;
 }
 
 .department-table table {
@@ -626,18 +655,39 @@ h3 {
 }
 
 .department-table th {
-  background-color: #f5f5f5;
+  background-color: #f0f8ff;
   font-weight: bold;
+}
+
+.department-table td:first-child {
+  width: 40%;
+}
+
+.department-table td input {
+  width: 100%;
+  border: none;
+  background-color: #f0f8ff;
+  padding: 5px;
 }
 
 /* Internship topics */
 .form-field ol {
-  margin-left: 25px;
-  padding-left: 0;
+  margin: 0 0 0 25px;
+  padding: 0;
+  list-style-position: outside;
 }
 
 .form-field ol li {
   margin-bottom: 10px;
+  padding: 0;
+}
+
+.form-field ol li input {
+  width: 100%;
+  background-color: #f0f8ff;
+  border: 1px solid #ccc;
+  padding: 5px;
+  height: 35px;
 }
 
 /* Meeting options */
