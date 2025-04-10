@@ -578,6 +578,7 @@ h3 {
   border: 1px solid #ccc;
   padding: 5px;
   background-color: #f0f8ff;
+  flex-direction: row; /* Ensure row direction */
 }
 
 .contact-item {
@@ -598,6 +599,7 @@ h3 {
   background-color: white;
   margin-bottom: 15px;
   width: 100%;
+  flex-direction: row; /* Ensure horizontal layout */
 }
 
 .student-row label:first-child {
@@ -611,6 +613,8 @@ h3 {
   flex: 1;
   border-left: 1px solid #ccc;
   background-color: #f0f8ff;
+  flex-direction: row; /* Ensure horizontal layout */
+  width: 100%;
 }
 
 .student-item {
@@ -619,6 +623,7 @@ h3 {
   position: relative;
   display: flex;
   align-items: center;
+  min-width: 0; /* Allow text to truncate if needed */
 }
 
 .student-item:first-child {
@@ -797,87 +802,377 @@ h3 {
     border-right: none;
     border-bottom: 1px solid #ccc;
   }
+
+  /* Override for print, even if screen is small */
+  @media print {
+    .contact-row {
+      flex-direction: row !important;
+    }
+  }
+
+  .student-row,
+  .student-fields {
+    flex-direction: column;
+  }
+
+  /* Override for print, even if screen is small */
+  @media print {
+    .student-row,
+    .student-fields {
+      flex-direction: row !important;
+    }
+  }
 }
 
 /* =========== Print Styles =========== */
 @media print {
-  body {
-    background-color: white;
-    font-size: 12pt;
-    color: black;
+  /* Reset box model for all elements to ensure consistent sizing */
+  * {
+    box-sizing: border-box !important;
+    margin: 2.8px !important;
+    padding: 1.5px !important;
   }
 
+  /* Base document settings - filling the page properly */
+  html,
+  body {
+    width: 210mm !important; /* Standard A4 width */
+    height: 297mm !important; /* Standard A4 height */
+    margin: 0 !important;
+    padding: 0 !important;
+    background-color: white !important;
+    font-size: 12pt !important; /* Smaller base font size to ensure fit */
+    color: black !important;
+    line-height: 1.2 !important; /* Reduced line height */
+    overflow: hidden !important; /* Prevent overflow */
+  }
+
+  /* Hide non-printable elements */
   .site-header,
   .site-footer,
   .no-print,
-  .btn {
+  .btn,
+  .form-actions {
     display: none !important;
   }
 
+  /* Container settings */
   .container,
   .form-container,
   .forms-list-container {
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    box-shadow: none;
+    width: 100% !important;
+    max-width: 210mm !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    background-color: white !important;
   }
 
-  .form-section {
-    page-break-inside: avoid;
-    margin-bottom: 1rem;
-    padding-bottom: 1rem;
-  }
-
-  .form-control {
-    border: 1px solid #999;
-  }
-
-  a {
-    color: black;
-    text-decoration: none;
-  }
-
-  h2,
-  h3 {
-    color: black;
-  }
-
-  /* Official Form print styles */
+  /* Form container - use scaling to ensure fit */
   .official-form-container {
-    padding: 0;
+    padding: 0 !important;
+    margin: 0 auto !important;
+    display: block !important;
+    transform-origin: top center !important;
+    transform: scale(0.95) !important; /* Scale down slightly to ensure fit */
   }
 
+  /* Main form - use most of the page with minimal margins */
   .official-form {
-    width: 100%;
-    border: none;
-    box-shadow: none;
+    width: 200mm !important;
+    min-height: 287mm !important;
+    margin: 5mm auto !important; /* Minimal margin */
+    padding: 5mm !important; /* Minimal padding */
+    border: none !important;
+    box-shadow: none !important;
+    position: relative !important;
   }
 
+  /* Header section - compact spacing with larger logo */
+  .form-header {
+    padding: 4px 0 !important;
+    margin-bottom: 5px !important;
+  }
+
+  .university-logo {
+    width: 85px !important; /* Increased logo size */
+    height: 85px !important;
+    left: 10px !important;
+  }
+
+  .logo-img {
+    max-width: 85px !important;
+    max-height: 85px !important;
+  }
+
+  /* Typography - larger header text */
+  .university-name {
+    font-size: 10.5pt !important;
+    margin: 0 0 2px 0 !important;
+  }
+
+  .school-name {
+    font-size: 13pt !important;
+    margin: 2px 0 !important;
+    line-height: 1.2 !important;
+    font-weight: bold !important;
+  }
+
+  .department-name {
+    font-size: 11pt !important;
+    margin: 2px 0 !important;
+    line-height: 1.2 !important;
+  }
+
+  .school-address {
+    font-size: 10pt !important;
+    margin: 2px 0 !important;
+  }
+
+  /* Form title - more compact */
+  .form-title {
+    padding: 4px 8px !important;
+    margin-bottom: 5px !important;
+    border-bottom: 1px solid #000 !important;
+  }
+
+  .form-title h2 {
+    font-size: 11pt !important;
+    margin: 2px auto !important;
+    line-height: 1.3 !important;
+  }
+
+  .form-subtitle {
+    font-size: 10pt !important;
+    margin: 2px 0 !important;
+  }
+
+  /* Main content - more compact spacing */
+  .form-section {
+    padding: 4px 8px !important;
+    margin-bottom: 5px !important;
+    padding-bottom: 3px !important;
+  }
+
+  /* Form fields - more compact spacing */
+  .form-field {
+    margin-bottom: 4px !important;
+    line-height: 1.3 !important;
+  }
+
+  /* Increase "ENTREPRISE" text size */
+  .form-field label[for="company_name"] {
+    font-size: 13pt !important;
+    font-weight: bold !important;
+  }
+
+  /* Decrease "Contact dans l'Entreprise" size and make it black */
+  .form-section h3 {
+    font-size: 11pt !important;
+    color: black !important;
+    margin-top: 4px !important;
+    margin-bottom: 4px !important;
+    font-weight: bold !important;
+  }
+
+  .form-field label {
+    margin-right: 3px !important;
+    font-size: 10pt !important;
+    font-weight: normal !important;
+  }
+
+  /* Form inputs - more compact */
   .form-field input,
   .form-field textarea {
     background-color: transparent !important;
-    border-bottom: 1px solid #000;
+    border-bottom: 1px solid #000 !important;
+    height: auto !important;
+    min-height: 18px !important; /* Shorter input fields */
+    padding: 2px 3px !important;
+    font-size: 10pt !important;
+    line-height: 1.2 !important;
+    margin-top: 1px !important;
   }
 
-  .contact-row,
+  /* Contact section - more compact */
+  .contact-row {
+    display: flex !important;
+    flex-direction: row !important;
+    width: 100% !important;
+    margin-bottom: 4px !important;
+    padding: 2px !important;
+    border: 1px solid #ccc !important;
+  }
+
+  .contact-item {
+    flex: 1 !important;
+    min-width: 0 !important;
+    padding: 2px 3px !important;
+  }
+
+  .contact-item:not(:last-child) {
+    border-right: 1px solid #ccc !important;
+  }
+
+  /* Student section - more compact */
   .student-row {
-    background-color: transparent !important;
+    display: flex !important;
+    flex-direction: row !important;
+    width: 100% !important;
+    margin-bottom: 5px !important;
+    border: 1px solid #ccc !important;
   }
 
-  .department-table th {
-    background-color: transparent !important;
+  .student-fields {
+    display: flex !important;
+    flex-direction: row !important;
+    width: 100% !important;
+    border-left: 1px solid #ccc !important;
   }
 
-  /* Hide form actions when printing */
-  .form-actions,
-  .no-print {
-    display: none !important;
+  .student-item {
+    flex: 1 !important;
+    min-width: 0 !important;
   }
 
-  /* Ensure proper page size for printing */
+  .student-item:first-child {
+    border-right: 1px solid #ccc !important;
+  }
+
+  .student-item label {
+    padding: 2px 5px !important;
+    font-size: 10pt !important;
+  }
+
+  .student-item input {
+    min-height: 22px !important;
+    padding: 2px 5px !important;
+  }
+
+  /* Department table - improve padding in cells */
+  .department-table {
+    margin-bottom: 5px !important;
+    width: 100% !important;
+  }
+
+  .department-table table {
+    border-collapse: collapse !important;
+    width: 100% !important;
+    border: 1px solid #000 !important;
+  }
+
+  .department-table th,
+  .department-table td {
+    padding: 6px 8px !important; /* Increased padding for more space */
+    font-size: 9.5pt !important;
+    border: 1px solid #000 !important;
+    line-height: 1.3 !important; /* Slightly increased line height */
+    vertical-align: middle !important;
+  }
+
+  /* Special styling for the program name cell */
+  .department-table th:nth-child(2) {
+    padding: 6px 10px !important; /* More horizontal padding for INFORMATIQUE */
+    text-align: center !important;
+    font-weight: bold !important;
+  }
+
+  /* Special styling for the diploma name cell */
+  .department-table th:nth-child(3) {
+    padding: 6px 10px !important; /* More horizontal padding */
+    line-height: 1.4 !important; /* Slightly more line spacing */
+    text-align: center !important;
+  }
+
+  /* Reduce height of some sections to compensate for the larger logo and header */
+  .signature-box {
+    height: 45px !important; /* Reduced from 50px */
+  }
+
+  .form-field ol li {
+    margin-bottom: 3px !important; /* Reduced from 4px */
+  }
+
+  .form-field ol li input {
+    height: 20px !important; /* Reduced from 22px */
+  }
+
+  /* Ensure form fits on single page by adjusting padding */
+  .form-section:last-child {
+    padding-bottom: 0 !important;
+    margin-bottom: 2px !important;
+  }
+
+  /* Page setup - zero margin to maximize space */
   @page {
-    size: A4;
-    margin: 0;
+    size: A4 portrait !important;
+    margin: 0mm !important; /* No margin to ensure fit */
+  }
+}
+
+/* PDF Action Buttons */
+.btn-download,
+.btn-print {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-download .icon,
+.btn-print .icon {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* Loading indicator for PDF operations */
+.loading-indicator {
+  display: inline-block;
+  margin-left: 5px;
+  animation: pulse 1.5s infinite;
+}
+
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  color: white;
+}
+
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #3498db;
+  border-radius: 50%;
+  animation: spin 2s linear infinite;
+  margin-bottom: 15px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.6;
   }
 }
