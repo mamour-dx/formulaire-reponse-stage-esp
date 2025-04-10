@@ -30,6 +30,10 @@
             .form-actions {
                 display: none;
             }
+            /* Hide header and footer when printing */
+            .site-header, .site-footer {
+                display: none;
+            }
         }
         
         /* Override header styles for perfect centering */
@@ -54,6 +58,48 @@
             text-align: center !important;
             width: 100% !important;
             display: block !important;
+        }
+
+        /* Print notice styling */
+        .print-notice {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            padding: 10px 15px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            color: #495057;
+        }
+        
+        .print-notice strong {
+            color: #dc3545;
+        }
+        
+        /* Prominent print button */
+        .print-direct-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin: 20px auto;
+            padding: 12px 24px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .print-direct-button:hover {
+            background-color: #0069d9;
+        }
+        
+        .print-direct-button .icon {
+            width: 20px;
+            height: 20px;
         }
     </style>
 {% endblock %}
@@ -82,7 +128,7 @@
         </div>
 
         <!-- Form Fields -->
-        <form method="POST" action="{{ url_for('submit_form') }}" class="internship-form">
+        <form class="internship-form" id="internship-form">
             {{ form.csrf_token }}
             
             <!-- Company Information Section -->
@@ -219,38 +265,51 @@
             
             <!-- Student Information Section -->
             <div class="form-section">
+                <h3>Étudiant</h3>
+                
                 <div class="form-field student-row">
-                    <label for="accepts_student">Accepte d'accueillir :</label>
-                    <div class="student-fields">
-                        <div class="student-item">
-                            <label for="student_name">Nom :</label>
-                            {{ form.student_name(class="form-control") }}
-                        </div>
-                        <div class="student-item">
-                            <label for="student_firstname">Prénoms :</label>
-                            {{ form.student_firstname(class="form-control") }}
-                        </div>
+                    <div class="student-item">
+                        <label for="student_name">NOM :</label>
+                        {{ form.student_name(class="form-control") }}
+                        {% if form.student_name.errors %}
+                            <div class="form-errors">
+                                {% for error in form.student_name.errors %}
+                                    <span class="error-message">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="student-item">
+                        <label for="student_firstname">Prénoms :</label>
+                        {{ form.student_firstname(class="form-control") }}
+                        {% if form.student_firstname.errors %}
+                            <div class="form-errors">
+                                {% for error in form.student_firstname.errors %}
+                                    <span class="error-message">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
+            </div>
+            
+            <!-- Internship Details Section -->
+            <div class="form-section">
+                <h3>Détails du Stage</h3>
                 
-                <!-- Department Information -->
-                <div class="department-table">
-                    <table>
-                        <tr>
-                            <th>Filière :</th>
-                            <th>INFORMATIQUE</th>
-                            <th>DIPLÔME UNIVERSITAIRE DE TECHNOLOGIE EN INFORMATIQUE</th>
-                        </tr>
-                        <tr>
-                            <td>Nombre de positions de stages envisagées :</td>
-                            <td colspan="2">
-                                {{ form.internship_positions(class="form-control") }}
-                            </td>
-                        </tr>
-                    </table>
+                <div class="form-field">
+                    <label for="internship_positions">Nombre de postes disponibles :</label>
+                    {{ form.internship_positions(class="form-control") }}
+                    {% if form.internship_positions.errors %}
+                        <div class="form-errors">
+                            {% for error in form.internship_positions.errors %}
+                                <span class="error-message">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
                 </div>
                 
-                <!-- Internship Topics -->
                 <div class="form-field">
                     <label for="internship_topics">Sujets de stages proposés (à titre indicatif) :</label>
                     <ol>
@@ -295,14 +354,7 @@
 </div>
 
 <!-- Form Actions (outside of the form, will be hidden in print) -->
-<div class="form-actions no-print">
-    <button type="submit" form="internship-form" class="btn btn-primary">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
-            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-            <polyline points="22 4 12 14.01 9 11.01"></polyline>
-        </svg>
-        {{ form.submit.label.text }}
-    </button>
+<div class="form-actions no-print" style="display: flex; justify-content: center;">
     <button type="button" class="btn btn-secondary" onclick="window.print()">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
             <polyline points="6 9 6 2 18 2 18 9"></polyline>
@@ -325,17 +377,19 @@
         form.id = 'internship-form';
         
         // Handle print button
-        const printButton = document.querySelector('button[onclick="window.print()"]');
-        if (printButton) {
-            printButton.addEventListener('click', function() {
-                // Prepare form for printing (add any needed classes)
-                document.body.classList.add('printing');
-                
-                // Print the document
-                window.print();
-                
-                // Remove print preparation classes
-                document.body.classList.remove('printing');
+        const printButtons = document.querySelectorAll('button[onclick="window.print()"]');
+        if (printButtons.length > 0) {
+            printButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Prepare form for printing (add any needed classes)
+                    document.body.classList.add('printing');
+                    
+                    // Print the document
+                    window.print();
+                    
+                    // Remove print preparation classes
+                    document.body.classList.remove('printing');
+                });
             });
         }
     });

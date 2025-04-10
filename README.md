@@ -1,169 +1,116 @@
-# Internship Form Portal
+# Formulaire de Réponse Stage ESP
 
-A Flask-based web application for companies to fill out, save, print, and submit internship recommendation forms that can later be displayed to students.
+Un outil simple basé sur Flask permettant de remplir et d'imprimer le formulaire de réponse pour les demandes de stage de l'ESP (École Supérieure Polytechnique).
 
-## Overview
+## Vue d'ensemble
 
-The Internship Form Portal allows companies to:
+Cet outil permet aux entreprises de :
 
-- Complete an interactive internship recommendation form online
-- Print the form for record keeping
-- Submit the form to be stored in a database
-- View previously submitted forms
+- Remplir un formulaire interactif de réponse de stage en ligne
+- Imprimer le formulaire rempli pour archivage
 
-Students can:
+**Aucune donnée n'est stockée sur le serveur.**
 
-- Browse available internship opportunities
-- Filter and search for internships by company, title, or description
-- View detailed information about each internship
+## Technologies utilisées
 
-## Tech Stack
+- **Backend** : Flask (Python)
+- **Formulaire** : Flask-WTF (WTForms)
+- **Frontend** : HTML, CSS, JavaScript
 
-- **Backend**: Flask (Python)
-- **Database**: SQLite (via SQLAlchemy ORM)
-- **Form Handling**: Flask-WTF (WTForms)
-- **Frontend**: HTML, CSS, JavaScript
-- **Testing**: Pytest
+## Fonctionnalités
 
-## Features
+- Formulaire interactif avec validation
+- Mise en page optimisée pour l'impression
+- Design responsive pour une utilisation sur mobile et ordinateur
+- Interface utilisateur simple et directe
 
-- Interactive form with validation
-- Print-friendly styling for physical copies
-- Responsive design for mobile and desktop use
-- Searchable internship listings
-- Clean, modern UI with accessible design
+## Installation et configuration
 
-## Installation and Setup
+### Prérequis
 
-### Prerequisites
+- Python 3.8 ou supérieur
+- pip (gestionnaire de paquets Python)
 
-- Python 3.8 or higher
-- pip (Python package manager)
+### Étapes d'installation
 
-### Installation Steps
-
-1. Clone the repository:
+1. Cloner le dépôt :
 
    ```
-   git clone https://github.com/yourusername/internship-form-portal.git
-   cd internship-form-portal
+   git clone https://github.com/mamour-dx/formulaire-reponse-stage-esp.git
+   cd formulaire-reponse-stage-esp
    ```
 
-2. Create and activate a virtual environment:
+2. Créer et activer un environnement virtuel :
 
    ```
    python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   source venv/bin/activate  # Sous Windows : venv\Scripts\activate
    ```
 
-3. Install dependencies:
+3. Installer les dépendances :
 
    ```
    pip install -r requirements.txt
    ```
 
-4. Set up environment variables (optional):
-
-   ```
-   export FLASK_ENV=development  # On Windows: set FLASK_ENV=development
-   export SECRET_KEY=your_secret_key  # For production
-   ```
-
-5. Initialize the database:
-
-   ```
-   flask shell
-   >>> from app import create_app
-   >>> from models import db
-   >>> app = create_app()
-   >>> with app.app_context():
-   >>>     db.create_all()
-   >>> exit()
-   ```
-
-6. Run the application:
+4. Exécuter l'application :
 
    ```
    python app.py
    ```
 
-7. Open your browser and navigate to `http://localhost:5000`
+5. Ouvrir votre navigateur et accéder à `http://localhost:8080`
 
-## Project Structure
+## Structure du projet
 
 ```
-internship-form-portal/
-├── app.py                  # Application entry point
-├── config.py               # Configuration settings
-├── models.py               # Database models
-├── forms.py                # Form definitions
-├── requirements.txt        # Python dependencies
-├── README.md               # This file
-├── static/                 # Static assets
+formulaire-reponse-stage-esp/
+├── app.py                  # Point d'entrée de l'application
+├── forms.py                # Définitions des formulaires
+├── requirements.txt        # Dépendances Python
+├── README.md               # Ce fichier
+├── static/                 # Ressources statiques
 │   ├── css/
-│   │   └── style.css       # Main stylesheet
+│   │   └── style.css       # Feuille de style principale
 │   ├── js/
-│   │   └── scripts.js      # Client-side JavaScript
-│   └── images/             # Image assets
-├── templates/              # HTML templates
-│   ├── base.html           # Base template
-│   ├── form.html           # Internship form
-│   └── list_forms.html     # Form listings
-└── tests/                  # Test files
-    └── test_app.py         # Application tests
+│   │   └── scripts.js      # JavaScript côté client
+│   └── images/             # Images
+├── templates/              # Templates HTML
+│   ├── base.html           # Template de base
+│   ├── form.html           # Formulaire de stage
+│   └── 404.html            # Page d'erreur 404
 ```
 
-## Usage
+## Utilisation
 
-### For Companies
+1. Accédez à la page d'accueil pour remplir le formulaire de stage
+2. Remplissez tous les champs requis avec les détails de l'entreprise et du stage
+3. Utilisez le bouton "Imprimer le formulaire" pour obtenir une version papier
 
-1. Navigate to the home page to access the internship form
-2. Fill out all required fields with your company and internship details
-3. Use the "Print Form" button to get a physical copy if needed
-4. Submit the form to save it to the database
-5. Receive a confirmation with a link to view your submitted form
+## Confidentialité
 
-### For Students
+Cet outil est conçu pour protéger votre vie privée :
 
-1. Navigate to the "View Forms" page to see all internship opportunities
-2. Use the search box to filter by company name, internship title, or description
-3. Click on an internship card to view detailed information
-4. Use the provided contact information to apply directly to the company
+- **Aucune donnée n'est stockée sur le serveur**
+- Tous les formulaires sont traités uniquement dans votre navigateur
+- Aucune information n'est envoyée à des tiers
 
-## Development
+## Optimisation pour l'impression
 
-### Running Tests
+La mise en page pour l'impression a été optimisée :
 
-```
-pytest tests/
-```
+- **Le formulaire s'adapte à une seule page A4** : Tout le contenu s'intègre correctement sur une page A4 standard
+- **Typographie améliorée** : Tailles de police et épaisseurs optimisées
+- **Disposition horizontale** : Les champs de téléphone, télécopie et email s'affichent horizontalement
+- **Interface simplifiée** : Interface épurée axée sur les données du formulaire
+- **Style spécifique à l'impression** : CSS complet spécifique à l'impression
 
-### Adding New Features
+Pour utiliser la fonction d'impression, cliquez simplement sur le bouton "Imprimer le formulaire".
 
-1. Create a new branch: `git checkout -b feature/your-feature-name`
-2. Implement your feature
-3. Run tests to ensure everything works: `pytest`
-4. Submit a pull request
+## Remarque
 
-## License
+Ce projet n'est pas affilié par le département génie informatique et a été maintenu par les étudiants pour faciliter le remplissement des formulaires des réponses pour les demandes de stages.
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+## Licence
 
-## Acknowledgements
-
-- Flask and its extensions for the excellent web framework
-- Contributors and maintainers of the project
-
-## Print Layout Optimization
-
-The print layout has been extensively optimized:
-
-- **Form Fits on a Single A4 Page**: All content properly fits on a standard A4 page
-- **Improved Typography**: Enhanced heading sizes and font weights
-- **Horizontal Contact Rows**: Telephone, telecopie, and email fields display horizontally
-- **Student Information Layout**: Nom and Prénoms fields display horizontally
-- **Department Table Spacing**: Added proper padding to table cells
-- **Simplified UI**: Clean interface focused on form data
-- **Print-Specific Styling**: Added comprehensive print-specific CSS
-
-To use the print feature, simply click the "Imprimer cette page" button.
+Ce projet est sous licence MIT - voir le fichier LICENSE pour plus de détails.

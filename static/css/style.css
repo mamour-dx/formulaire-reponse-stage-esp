@@ -829,8 +829,8 @@ h3 {
   /* Reset box model for all elements to ensure consistent sizing */
   * {
     box-sizing: border-box !important;
-    margin: 2.8px !important;
-    padding: 1.5px !important;
+    margin: 2.7px !important;
+    padding: 1.3px !important;
   }
 
   /* Base document settings - filling the page properly */

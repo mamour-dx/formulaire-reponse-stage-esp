@@ -3,17 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}{{ title if title else 'Internship Form Portal' }}{% endblock %}</title>
+    <title>{% block title %}{{ title if title else 'Outil pour impression de formulaire' }}{% endblock %}</title>
     
     <!-- Link to the CSS file for styling -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     
     <!-- Additional metatags for better SEO and accessibility -->
-    <meta name="description" content="Internship Form Portal - Submit and manage internship opportunities">
-    <meta name="author" content="Internship Form Portal Team">
+    <meta name="description" content="Outil d'impression de formulaire de stage">
+    <meta name="author" content="ESP - Département Génie Informatique">
     
     <style>
         /* Critical CSS overrides to fix centering issues - Now handled in style.css */
+        .site-header .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .header-logo h1 {
+            text-align: center;
+            margin: 1rem 0;
+        }
+        
+        .main-nav ul {
+            display: flex;
+            justify-content: center;
+            padding: 0;
+        }
     </style>
     
     {% block extra_head %}{% endblock %}
@@ -23,12 +40,11 @@
     <header class="site-header">
         <div class="container">
             <div class="header-logo">
-                <h1>Internship Form Portal</h1>
+                <h1>Outil pour impression de formulaire de stage</h1>
             </div>
             <nav class="main-nav">
                 <ul>
-                    <li><a href="{{ url_for('index') }}">Submit Form</a></li>
-                    <li><a href="{{ url_for('list_forms') }}">View Forms</a></li>
+                    <li><a href="{{ url_for('index') }}">Formulaire</a></li>
                 </ul>
             </nav>
         </div>
@@ -57,13 +73,9 @@
     
     <!-- Footer section -->
     <footer class="site-footer">
-        <div class="container">
-            <p>&copy; {{ now.year }} Internship Form Portal. All rights reserved.</p>
-            <div class="footer-links">
-                <a href="#">Privacy Policy</a>
-                <a href="#">Terms of Service</a>
-                <a href="#">Contact Us</a>
-            </div>
+        <div class="container" style="text-align: center;">
+            <p>Ce projet n'est pas affilié par le departement génie informatique de l'ESP et est maintenu par les étudiants pour faciliter le remplissement des formualaires pour les réponses aux demandes de stages. Aucune donnée n'est stocké sur le serveur.</p>
+            <p>Fully open source at <a href="https://github.com/mamour-dx/formulaire-reponse-stage-esp" target="_blank">https://github.com/mamour-dx/formulaire-reponse-stage-esp</a></p>
         </div>
     </footer>
     

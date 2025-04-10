@@ -1,11 +1,11 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField, DateField, BooleanField, SubmitField, IntegerField
+from wtforms import StringField, TextAreaField, BooleanField, IntegerField
 from wtforms.validators import DataRequired, Email, Length, Optional
 
 class InternshipFormSubmission(FlaskForm):
     """WTForm class for the internship form.
     
-    This form is used to collect and validate internship information from companies.
+    This form is used to collect internship information from companies for printing.
     It includes fields to match the official paper form from École Supérieure Polytechnique.
     """
     # Company Information
@@ -95,7 +95,4 @@ class InternshipFormSubmission(FlaskForm):
     signature_location = StringField('Fait à', validators=[
         Optional(),
         Length(max=100, message='L\'emplacement doit être moins de 100 caractères')
-    ])
-    
-    # Submit button
-    submit = SubmitField('Soumettre le formulaire') 
+    ]) 
