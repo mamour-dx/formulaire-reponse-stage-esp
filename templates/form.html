@@ -284,21 +284,21 @@
                     </div>
                 </div>
             </div>
-            
-            <!-- Form Footer -->
-            <div class="form-footer">
-                <div class="left-footer">ESP · BP 15915 Dakar-Fann</div>
-                <div class="right-footer">Téléphone : 33 825 75 28</div>
-            </div>
-            
-            <!-- Submit Button (will be hidden in print) -->
-            <div class="form-actions no-print">
-                <button type="submit" class="btn btn-primary">{{ form.submit.label.text }}</button>
-                <button type="button" class="btn btn-secondary" onclick="window.print()">Imprimer le formulaire</button>
-                <button type="reset" class="btn btn-outline">Réinitialiser</button>
-            </div>
         </form>
+
+        <!-- Form Footer - Moved outside the form but still inside the official-form -->
+        <div class="form-footer">
+            <div class="left-footer">ESP · BP 15915 Dakar-Fann</div>
+            <div class="right-footer">Téléphone : 33 825 75 28</div>
+        </div>
     </div>
+</div>
+
+<!-- Submit Button (outside of the form, will be hidden in print) -->
+<div class="form-actions no-print">
+    <button type="submit" form="internship-form" class="btn btn-primary">{{ form.submit.label.text }}</button>
+    <button type="button" class="btn btn-secondary" onclick="window.print()">Imprimer le formulaire</button>
+    <button type="reset" form="internship-form" class="btn btn-outline">Réinitialiser</button>
 </div>
 {% endblock %}
 
@@ -307,6 +307,9 @@
     // Print functionality and form validation
     document.addEventListener('DOMContentLoaded', function() {
         const form = document.querySelector('.internship-form');
+        
+        // Set id on the form to connect buttons outside the form
+        form.id = 'internship-form';
         
         // Handle print button
         const printButton = document.querySelector('button[onclick="window.print()"]');
