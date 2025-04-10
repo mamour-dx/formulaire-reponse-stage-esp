@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initFormValidation();
     initPrintButtons();
     initDatePickers();
+    initPdfButtons();
     
     // Flash message auto-hide after 5 seconds
     setTimeout(function() {
@@ -145,6 +146,7 @@ function scrollToFirstError() {
 
 /**
  * Initialize print functionality for print buttons
+ * Enhanced to provide better print experience for A4 paper
  */
 function initPrintButtons() {
     const printButtons = document.querySelectorAll('button[onclick="window.print()"]');
@@ -166,6 +168,7 @@ function initPrintButtons() {
 /**
  * Prepare the page for printing
  * This function makes any necessary DOM adjustments before printing
+ * Optimized for A4 paper format
  */
 function prepareForPrinting() {
     // Add 'printing' class to body for print-specific styling
@@ -177,6 +180,10 @@ function prepareForPrinting() {
         element.setAttribute('data-print-display', element.style.display);
         element.style.display = 'none';
     });
+
+    // Additional preparation for optimal A4 layout
+    // The CSS will handle most of this through @media print rules
+    console.log('Preparing document for A4 print format');
 }
 
 /**
@@ -197,6 +204,8 @@ function restoreAfterPrinting() {
             element.style.display = '';
         }
     });
+
+    console.log('Print preparation restored');
 }
 
 /**
@@ -216,4 +225,159 @@ function initDatePickers() {
         // Example implementation would go here if we decide to add a datepicker library
         // This is left as a placeholder for future enhancement
     }
+}
+
+/**
+ * Initialize PDF download and print buttons
+ */
+function initPdfButtons() {
+    // Initialize PDF download buttons
+    const pdfDownloadLinks = document.querySelectorAll('.btn-download');
+    
+    pdfDownloadLinks.forEach(function(link) {
+        link.addEventListener('click', function(event) {
+            // Show a loading indicator if the download might take time
+            const loadingIndicator = document.createElement('span');
+            loadingIndicator.className = 'loading-indicator';
+            loadingIndicator.textContent = ' Loading...';
+            link.appendChild(loadingIndicator);
+            
+            // Remove the loading indicator after 2 seconds (typical download start time)
+            setTimeout(function() {
+                link.removeChild(loadingIndicator);
+            }, 2000);
+        });
+    });
+    
+    // Initialize PDF print buttons
+    const pdfPrintButtons = document.querySelectorAll('.btn-print');
+    
+    pdfPrintButtons.forEach(function(button) {
+        // If the button doesn't already have an onclick handler for printPDF function
+        if (!button.getAttribute('onclick') || !button.getAttribute('onclick').includes('printPDF')) {
+            button.addEventListener('click', function(event) {
+                const formId = button.getAttribute('data-form-id');
+                if (formId) {
+                    printPDF(formId);
+                } else {
+                    console.error('No form ID specified for PDF printing');
+                }
+            });
+        }
+    });
+}
+
+/**
+ * Print a PDF by loading it in an iframe
+ * @param {string|number} formId - ID of the form to print the PDF for
+ */
+function printPDF(formId) {
+    // Show loading indicator
+    const loadingOverlay = document.createElement('div');
+    loadingOverlay.className = 'loading-overlay';
+    loadingOverlay.innerHTML = '<div class="loading-spinner"></div><p>Preparing PDF for printing...</p>';
+    document.body.appendChild(loadingOverlay);
+    
+    // Convert formId to number if it's a string
+    const numericId = typeof formId === 'string' ? parseInt(formId, 10) : formId;
+    
+    // Fetch the PDF
+    fetch(`/download_pdf/${numericId}`, {
+        method: 'GET'
+    })
+    .then(response => response.blob())
+    .then(blob => {
+        // Remove loading overlay
+        document.body.removeChild(loadingOverlay);
+        
+        // Create a temporary URL for the PDF
+        const url = window.URL.createObjectURL(blob);
+        
+        // Create an iframe to hold the PDF for printing
+        const printFrame = document.createElement('iframe');
+        printFrame.style.position = 'fixed';
+        printFrame.style.right = '0';
+        printFrame.style.bottom = '0';
+        printFrame.style.width = '0';
+        printFrame.style.height = '0';
+        printFrame.style.border = '0';
+        
+        // When the iframe loads, print its contents
+        printFrame.onload = function() {
+            setTimeout(function() {
+                printFrame.contentWindow.print();
+                
+                // Clean up after printing
+                setTimeout(function() {
+                    document.body.removeChild(printFrame);
+                    window.URL.revokeObjectURL(url);
+                }, 1000);
+            }, 500);
+        };
+        
+        // Set the source and add the iframe to the document
+        printFrame.src = url;
+        document.body.appendChild(printFrame);
+    })
+    .catch(error => {
+        // Remove loading overlay
+        document.body.removeChild(loadingOverlay);
+        
+        console.error('Error printing PDF:', error);
+        alert('Could not print the PDF. Please try downloading it instead.');
+    });
+}
+
+/**
+ * Preview a form as PDF before submission
+ * This function is called from the form page
+ */
+function previewFormAsPDF() {
+    const form = document.getElementById('internship-form');
+    if (!form) {
+        console.error('Form not found for PDF preview');
+        return;
+    }
+    
+    const formData = new FormData(form);
+    
+    // Show the modal with loading message
+    const modal = document.getElementById('pdfPreviewModal');
+    const previewContainer = document.getElementById('pdfPreviewContainer');
+    
+    if (!modal || !previewContainer) {
+        console.error('PDF preview modal elements not found');
+        return;
+    }
+    
+    modal.style.display = 'block';
+    previewContainer.innerHTML = '<div class="loading-spinner"></div><p>Generating PDF preview...</p>';
+    
+    // Send form data to server for PDF generation
+    fetch('/preview_pdf', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('PDF preview generation failed');
+        }
+        return response.text();
+    })
+    .then(() => {
+        // Load the generated PDF in an iframe
+        const iframe = document.createElement('iframe');
+        iframe.src = '/preview_pdf';
+        iframe.style.width = '100%';
+        iframe.style.height = '100%';
+        iframe.style.border = 'none';
+        
+        // Clear container and add iframe
+        previewContainer.innerHTML = '';
+        previewContainer.appendChild(iframe);
+    })
+    .catch(error => {
+        console.error('Error generating PDF preview:', error);
+        previewContainer.innerHTML = '<p style="color: red;">Error generating PDF preview. Please try again or submit the form to see the final PDF.</p>';
+    });
 } 
