@@ -1,11 +1,12 @@
 import os
-from flask import Flask, render_template, redirect, url_for, flash, request
+from flask import Flask, render_template, redirect, url_for, flash, request, send_file, session
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
 from config import config_by_name
 from models import db, InternshipForm
 from forms import InternshipFormSubmission
+from pdf_utils import generate_filled_pdf, fill_pdf_form_with_mapping
 
 def create_app(config_name='development'):
     """Factory function to create and configure the Flask application.
@@ -84,7 +85,16 @@ def register_routes(app):
             db.session.add(internship_form)
             db.session.commit()
             
-            flash('Formulaire de stage soumis avec succès!', 'success')
+            # Generate filled PDF using the submitted form data
+            try:
+                pdf_path = fill_pdf_form_with_mapping(internship_form)
+                # Store the PDF path in the session for later access
+                session['last_generated_pdf'] = os.path.basename(pdf_path)
+                flash('Formulaire de stage soumis avec succès!', 'success')
+            except Exception as e:
+                app.logger.error(f"PDF generation error: {str(e)}")
+                flash('Formulaire soumis, mais il y a eu un problème lors de la génération du PDF.', 'warning')
+            
             return redirect(url_for('form_success', form_id=internship_form.id))
         
         # If form validation fails, return to the form with errors
@@ -95,7 +105,8 @@ def register_routes(app):
     def form_success(form_id):
         """Display success page after form submission."""
         form = InternshipForm.query.get_or_404(form_id)
-        return render_template('form_success.html', form=form, title='Soumission Réussie')
+        pdf_filename = session.get('last_generated_pdf', None)
+        return render_template('form_success.html', form=form, pdf_filename=pdf_filename, title='Soumission Réussie')
     
     @app.route('/forms')
     def list_forms():
@@ -108,6 +119,22 @@ def register_routes(app):
         """Display details of a specific internship form."""
         form = InternshipForm.query.get_or_404(form_id)
         return render_template('view_form.html', form=form, title=f'Stage à {form.company_name}')
+    
+    @app.route('/download_pdf/<int:form_id>')
+    def download_pdf(form_id):
+        """Generate and download a filled PDF for a specific form."""
+        form = InternshipForm.query.get_or_404(form_id)
+        
+        try:
+            # Generate filled PDF using the form data
+            pdf_path = fill_pdf_form_with_mapping(form)
+            # Return the PDF as an attachment for download
+            return send_file(pdf_path, as_attachment=True, 
+                            download_name=f"formulaire_stage_{form.company_name}.pdf")
+        except Exception as e:
+            app.logger.error(f"PDF download error: {str(e)}")
+            flash('Erreur lors de la génération du PDF.', 'error')
+            return redirect(url_for('view_form', form_id=form_id))
     
     @app.errorhandler(404)
     def page_not_found(e):
@@ -123,4 +150,4 @@ if __name__ == '__main__':
     # Get the environment configuration from an environment variable or default to development
     env = os.environ.get('FLASK_ENV', 'development')
     app = create_app(env)
-    app.run(host='0.0.0.0', port=5000) 
+    app.run(host='0.0.0.0', port=8080) 
