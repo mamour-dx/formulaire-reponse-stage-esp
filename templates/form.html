@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block extra_head %}
-    <!-- Additional CSS for form styling -->
+    <!-- Additional CSS for form styling and print formatting -->
     <style>
         @media print {
             .no-print {
@@ -13,251 +13,315 @@
             body {
                 font-size: 12pt;
             }
+            /* Special print styles for the official form */
+            .official-form {
+                border: 1px solid #000;
+                padding: 0;
+                margin: 0;
+                width: 210mm; /* A4 width */
+                min-height: 297mm; /* A4 height */
+            }
+            .form-field input, .form-field textarea {
+                border: none;
+                border-bottom: 1px solid #444;
+                background: transparent;
+            }
+            /* Hide buttons when printing */
+            .form-actions {
+                display: none;
+            }
+        }
+        
+        /* Override header styles for perfect centering */
+        .header-table {
+            width: 100%;
+            table-layout: fixed;
+        }
+        
+        .title-cell {
+            text-align: center !important;
+        }
+        
+        .university-title  {
+            text-align: center !important;
+            align-items: center !important;
+            margin: 5px auto !important;
+            width: 100% !important;
+        }
+        
+        /* Title specific adjustments */
+        .university-name, .school-name, .department-name, .school-address {
+            text-align: center !important;
+            width: 100% !important;
+            display: block !important;
         }
     </style>
 {% endblock %}
 
 {% block content %}
-<div class="form-container">
-    <section class="page-header">
-        <h2>Internship Recommendation Form</h2>
-        <p class="form-intro">
-            This form is for companies to recommend internship opportunities for students.
-            Please fill out all required fields. The information provided will be shared with students
-            who are looking for internship opportunities.
-        </p>
-    </section>
-
-    <form method="POST" action="{{ url_for('submit_form') }}" class="internship-form">
-        {{ form.csrf_token }}
-        
-        <!-- Company Information Section -->
-        <section class="form-section">
-            <h3>Company Information</h3>
-            <div class="form-group">
-                {{ form.company_name.label(class="form-label") }}
-                {{ form.company_name(class="form-control") }}
-                {% if form.company_name.errors %}
-                    <div class="form-errors">
-                        {% for error in form.company_name.errors %}
-                            <span class="error-message">{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                {% endif %}
+<div class="official-form-container">
+    <!-- Official form that matches the provided image -->
+    <div class="official-form">
+        <!-- University Header with logo and title -->
+        <div class="form-header">
+            <div class="university-logo">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="UCAD Logo" class="logo-img">
             </div>
-            
-            <div class="form-group">
-                {{ form.company_address.label(class="form-label") }}
-                {{ form.company_address(class="form-control") }}
-                {% if form.company_address.errors %}
-                    <div class="form-errors">
-                        {% for error in form.company_address.errors %}
-                            <span class="error-message">{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                {% endif %}
+            <div class="university-title">
+                <p class="university-name">Université Cheikh Anta Diop de Dakar</p>
+                <p class="school-name">ECOLE SUPERIEURE POLYTECHNIQUE</p>
+                <p class="department-name">DEPARTEMENT GENIE INFORMATIQUE</p>
+                <p class="school-address">B.P. 15915 Dakar-Fann (SENEGAL)</p>
             </div>
-            
-            <div class="form-row">
-                <div class="form-group half-width">
-                    {{ form.company_postal_code.label(class="form-label") }}
-                    {{ form.company_postal_code(class="form-control") }}
-                    {% if form.company_postal_code.errors %}
-                        <div class="form-errors">
-                            {% for error in form.company_postal_code.errors %}
-                                <span class="error-message">{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-                </div>
-                
-                <div class="form-group half-width">
-                    {{ form.company_city.label(class="form-label") }}
-                    {{ form.company_city(class="form-control") }}
-                    {% if form.company_city.errors %}
-                        <div class="form-errors">
-                            {% for error in form.company_city.errors %}
-                                <span class="error-message">{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-                </div>
-            </div>
-        </section>
-        
-        <!-- Contact Person Information Section -->
-        <section class="form-section">
-            <h3>Contact Person Information</h3>
-            <div class="form-group">
-                {{ form.contact_name.label(class="form-label") }}
-                {{ form.contact_name(class="form-control") }}
-                {% if form.contact_name.errors %}
-                    <div class="form-errors">
-                        {% for error in form.contact_name.errors %}
-                            <span class="error-message">{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-            </div>
-            
-            <div class="form-group">
-                {{ form.contact_position.label(class="form-label") }}
-                {{ form.contact_position(class="form-control") }}
-                {% if form.contact_position.errors %}
-                    <div class="form-errors">
-                        {% for error in form.contact_position.errors %}
-                            <span class="error-message">{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-            </div>
-            
-            <div class="form-group">
-                {{ form.contact_email.label(class="form-label") }}
-                {{ form.contact_email(class="form-control") }}
-                {% if form.contact_email.errors %}
-                    <div class="form-errors">
-                        {% for error in form.contact_email.errors %}
-                            <span class="error-message">{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-            </div>
-            
-            <div class="form-row">
-                <div class="form-group half-width">
-                    {{ form.contact_phone.label(class="form-label") }}
-                    {{ form.contact_phone(class="form-control") }}
-                    {% if form.contact_phone.errors %}
-                        <div class="form-errors">
-                            {% for error in form.contact_phone.errors %}
-                                <span class="error-message">{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-                </div>
-                
-                <div class="form-group half-width">
-                    {{ form.contact_fax.label(class="form-label") }}
-                    {{ form.contact_fax(class="form-control") }}
-                    {% if form.contact_fax.errors %}
-                        <div class="form-errors">
-                            {% for error in form.contact_fax.errors %}
-                                <span class="error-message">{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-                </div>
-            </div>
-        </section>
-        
-        <!-- Internship Details Section -->
-        <section class="form-section">
-            <h3>Internship Details</h3>
-            
-            <div class="form-group">
-                {{ form.internship_title.label(class="form-label") }}
-                {{ form.internship_title(class="form-control") }}
-                {% if form.internship_title.errors %}
-                    <div class="form-errors">
-                        {% for error in form.internship_title.errors %}
-                            <span class="error-message">{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-            </div>
-            
-            <div class="form-group">
-                {{ form.internship_description.label(class="form-label") }}
-                {{ form.internship_description(class="form-control", rows=5) }}
-                {% if form.internship_description.errors %}
-                    <div class="form-errors">
-                        {% for error in form.internship_description.errors %}
-                            <span class="error-message">{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-                <small class="form-help-text">Please provide a detailed description of the internship, including the tasks and responsibilities.</small>
-            </div>
-            
-            <div class="form-group">
-                {{ form.internship_requirements.label(class="form-label") }}
-                {{ form.internship_requirements(class="form-control", rows=3) }}
-                {% if form.internship_requirements.errors %}
-                    <div class="form-errors">
-                        {% for error in form.internship_requirements.errors %}
-                            <span class="error-message">{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-                <small class="form-help-text">List any specific skills, knowledge, or qualifications required for this internship.</small>
-            </div>
-            
-            <div class="form-row">
-                <div class="form-group half-width">
-                    {{ form.internship_start_date.label(class="form-label") }}
-                    {{ form.internship_start_date(class="form-control", type="date") }}
-                    {% if form.internship_start_date.errors %}
-                        <div class="form-errors">
-                            {% for error in form.internship_start_date.errors %}
-                                <span class="error-message">{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-                </div>
-                
-                <div class="form-group half-width">
-                    {{ form.internship_duration.label(class="form-label") }}
-                    {{ form.internship_duration(class="form-control") }}
-                    {% if form.internship_duration.errors %}
-                        <div class="form-errors">
-                            {% for error in form.internship_duration.errors %}
-                                <span class="error-message">{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-                    <small class="form-help-text">E.g., "3 months", "Summer 2023", etc.</small>
-                </div>
-            </div>
-        </section>
-        
-        <!-- Terms Agreement Section -->
-        <section class="form-section">
-            <div class="form-group checkbox-group">
-                {{ form.agree_to_terms(class="form-checkbox") }}
-                {{ form.agree_to_terms.label(class="form-checkbox-label") }}
-                {% if form.agree_to_terms.errors %}
-                    <div class="form-errors">
-                        {% for error in form.agree_to_terms.errors %}
-                            <span class="error-message">{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-            </div>
-        </section>
-        
-        <!-- Form Actions -->
-        <div class="form-actions no-print">
-            <button type="submit" class="btn btn-primary">{{ form.submit.label.text }}</button>
-            <button type="button" class="btn btn-secondary" onclick="window.print()">Print Form</button>
-            <button type="reset" class="btn btn-outline">Reset Form</button>
         </div>
-    </form>
+
+        <!-- Form Title -->
+        <div class="form-title">
+            <h2>REPONSE POUR STAGE DE FIN DE CYCLE DU DIPLOME UNIVERSITAIRE<br>DE TECHNOLOGIE EN INFORMATIQUE</h2>
+            <p class="form-subtitle">- Année 2025 -</p>
+        </div>
+
+        <!-- Form Fields -->
+        <form method="POST" action="{{ url_for('submit_form') }}" class="internship-form">
+            {{ form.csrf_token }}
+            
+            <!-- Company Information Section -->
+            <div class="form-section">
+                <div class="form-field">
+                    <label for="company_name">ENTREPRISE :</label>
+                    {{ form.company_name(class="form-control") }}
+                    {% if form.company_name.errors %}
+                        <div class="form-errors">
+                            {% for error in form.company_name.errors %}
+                                <span class="error-message">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <div class="form-field">
+                    <label for="company_address">Adresse :</label>
+                    {{ form.company_address(class="form-control") }}
+                    {% if form.company_address.errors %}
+                        <div class="form-errors">
+                            {% for error in form.company_address.errors %}
+                                <span class="error-message">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <div class="form-field contact-row">
+                    <div class="contact-item">
+                        <label for="contact_phone">Téléphone :</label>
+                        {{ form.contact_phone(class="form-control") }}
+                        {% if form.contact_phone.errors %}
+                            <div class="form-errors">
+                                {% for error in form.contact_phone.errors %}
+                                    <span class="error-message">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="contact-item">
+                        <label for="contact_fax">Télécopie :</label>
+                        {{ form.contact_fax(class="form-control") }}
+                        {% if form.contact_fax.errors %}
+                            <div class="form-errors">
+                                {% for error in form.contact_fax.errors %}
+                                    <span class="error-message">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="contact-item">
+                        <label for="contact_email">Email :</label>
+                        {{ form.contact_email(class="form-control") }}
+                        {% if form.contact_email.errors %}
+                            <div class="form-errors">
+                                {% for error in form.contact_email.errors %}
+                                    <span class="error-message">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contact Person Information Section -->
+            <div class="form-section">
+                <h3>Contact dans l'Entreprise</h3>
+                
+                <div class="form-field">
+                    <label for="contact_name">NOM :</label>
+                    {{ form.contact_name(class="form-control") }}
+                    {% if form.contact_name.errors %}
+                        <div class="form-errors">
+                            {% for error in form.contact_name.errors %}
+                                <span class="error-message">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <div class="form-field">
+                    <label for="contact_position">Fonction :</label>
+                    {{ form.contact_position(class="form-control") }}
+                    {% if form.contact_position.errors %}
+                        <div class="form-errors">
+                            {% for error in form.contact_position.errors %}
+                                <span class="error-message">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <div class="form-field contact-row">
+                    <div class="contact-item">
+                        <label for="contact_phone_direct">Téléphone :</label>
+                        {{ form.contact_phone_direct(class="form-control") }}
+                        {% if form.contact_phone_direct.errors %}
+                            <div class="form-errors">
+                                {% for error in form.contact_phone_direct.errors %}
+                                    <span class="error-message">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="contact-item">
+                        <label for="contact_fax_direct">Télécopie :</label>
+                        {{ form.contact_fax_direct(class="form-control") }}
+                        {% if form.contact_fax_direct.errors %}
+                            <div class="form-errors">
+                                {% for error in form.contact_fax_direct.errors %}
+                                    <span class="error-message">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="contact-item">
+                        <label for="contact_email_direct">Email :</label>
+                        {{ form.contact_email_direct(class="form-control") }}
+                        {% if form.contact_email_direct.errors %}
+                            <div class="form-errors">
+                                {% for error in form.contact_email_direct.errors %}
+                                    <span class="error-message">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Student Information Section -->
+            <div class="form-section">
+                <div class="form-field student-row">
+                    <label for="accepts_student">Accepte d'accueillir :</label>
+                    <div class="student-fields">
+                        <div class="student-item">
+                            <label for="student_name">Nom :</label>
+                            {{ form.student_name(class="form-control") }}
+                        </div>
+                        <div class="student-item">
+                            <label for="student_firstname">Prénoms :</label>
+                            {{ form.student_firstname(class="form-control") }}
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Department Information -->
+                <div class="department-table">
+                    <table>
+                        <tr>
+                            <th>Filière :</th>
+                            <th>INFORMATIQUE</th>
+                            <th>DIPLOME UNIVERSITAIRE DE TECHNOLOGIE EN INFORMATIQUE</th>
+                        </tr>
+                        <tr>
+                            <td>Nombre de positions de stages envisagées :</td>
+                            <td colspan="2">
+                                {{ form.internship_positions(class="form-control") }}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <!-- Internship Topics -->
+                <div class="form-field">
+                    <label for="internship_topics">Sujets de stages proposés (à titre indicatif) :</label>
+                    <ol>
+                        <li>{{ form.internship_topic1(class="form-control") }}</li>
+                        <li>{{ form.internship_topic2(class="form-control") }}</li>
+                        <li>{{ form.internship_topic3(class="form-control") }}</li>
+                    </ol>
+                </div>
+                
+                <!-- Meeting Preferences -->
+                <div class="form-field meeting-options">
+                    <div class="meeting-option">
+                        {{ form.wants_meeting(class="form-checkbox") }}
+                        <label for="wants_meeting">Souhaite rencontrer un membre du département pour plus d'informations</label>
+                    </div>
+                    <div class="meeting-option">
+                        {{ form.cannot_accept(class="form-checkbox") }}
+                        <label for="cannot_accept">Ne peut donner suite à la demande</label>
+                    </div>
+                </div>
+                
+                <!-- Signature Section -->
+                <div class="form-field signature-section">
+                    <div class="date-field">
+                        <label for="signature_date">Fait à :</label>
+                        {{ form.signature_location(class="form-control") }}
+                    </div>
+                    <div class="signature-field">
+                        <span>Signature et Cachet</span>
+                        <div class="signature-box"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Form Footer -->
+            <div class="form-footer">
+                <div class="left-footer">ESP · BP 15915 Dakar-Fann</div>
+                <div class="right-footer">Téléphone : 33 825 75 28</div>
+            </div>
+            
+            <!-- Submit Button (will be hidden in print) -->
+            <div class="form-actions no-print">
+                <button type="submit" class="btn btn-primary">{{ form.submit.label.text }}</button>
+                <button type="button" class="btn btn-secondary" onclick="window.print()">Imprimer le formulaire</button>
+                <button type="reset" class="btn btn-outline">Réinitialiser</button>
+            </div>
+        </form>
+    </div>
 </div>
 {% endblock %}
 
 {% block scripts %}
 <script>
-    // Form validation enhancement
+    // Print functionality and form validation
     document.addEventListener('DOMContentLoaded', function() {
         const form = document.querySelector('.internship-form');
         
-        form.addEventListener('submit', function(event) {
-            // Client-side validation can be added here if needed
-            // This is in addition to server-side validation
-        });
-        
-        // Add any additional form interactivity here
+        // Handle print button
+        const printButton = document.querySelector('button[onclick="window.print()"]');
+        if (printButton) {
+            printButton.addEventListener('click', function() {
+                // Prepare form for printing (add any needed classes)
+                document.body.classList.add('printing');
+                
+                // Print the document
+                window.print();
+                
+                // Remove print preparation classes
+                document.body.classList.remove('printing');
+            });
+        }
     });
 </script>
 {% endblock %} 

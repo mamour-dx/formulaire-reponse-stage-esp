@@ -425,6 +425,278 @@ h3 {
   margin-bottom: 1rem;
 }
 
+/* =========== Official Form Styles =========== */
+/* These styles are specifically for the official form template */
+
+.official-form-container {
+  display: flex;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.official-form {
+  width: 210mm; /* A4 width */
+  min-height: 297mm; /* A4 height */
+  background-color: white;
+  margin: 0 auto;
+  padding: 0;
+  position: relative;
+  border: 1px solid #000;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+}
+
+/* Header styling */
+.form-header {
+  width: 100%;
+  border-bottom: 1px solid #000;
+  background-color: #fff;
+  padding: 10px 0;
+  text-align: center;
+  position: relative;
+}
+
+/* Logo positioning */
+.university-logo {
+  position: absolute;
+  left: 40px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100px;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo-img {
+  max-width: 100px;
+  max-height: 100px;
+}
+
+/* Main title section - center this correctly */
+.university-title {
+  width: 80%;
+  margin: 0 auto;
+  padding: 0;
+  text-align: center;
+}
+
+.university-name {
+  font-size: 14px;
+  font-weight: normal;
+  margin: 0 0 5px;
+  padding: 0;
+  text-align: center;
+}
+
+.school-name {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 5px 0;
+  padding: 0;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.department-name {
+  font-size: 16px;
+  font-weight: normal;
+  margin: 5px 0;
+  padding: 0;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.school-address {
+  font-size: 14px;
+  margin: 5px 0 0;
+  padding: 0;
+  text-align: center;
+}
+
+/* Form Title */
+.form-title {
+  text-align: center;
+  padding: 15px 20px;
+  border-bottom: 1px solid #000;
+}
+
+.form-title h2 {
+  font-size: 16px;
+  font-weight: bold;
+  margin: 0 auto;
+  max-width: 95%;
+  text-transform: uppercase;
+  color: #000;
+  line-height: 1.3;
+}
+
+.form-subtitle {
+  font-size: 14px;
+  text-align: center;
+  margin: 5px 0 0;
+}
+
+/* Form Fields */
+.form-section {
+  padding: 10px 20px;
+  margin-bottom: 10px;
+}
+
+.form-field {
+  margin-bottom: 10px;
+  position: relative;
+}
+
+.form-field label {
+  display: inline-block;
+  font-weight: normal;
+  margin-right: 5px;
+}
+
+.form-field input,
+.form-field textarea {
+  width: calc(100% - 10px);
+  padding: 5px;
+  border: none;
+  border-bottom: 1px solid #ccc;
+  background-color: #f0f8ff; /* Light blue background to match the image */
+  font-size: 14px;
+}
+
+/* Contact row with multiple fields */
+.contact-row {
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid #ccc;
+  padding: 5px;
+  background-color: #f0f8ff;
+}
+
+.contact-item {
+  flex: 1;
+  padding: 0 5px;
+}
+
+.contact-item:not(:last-child) {
+  border-right: 1px solid #ccc;
+}
+
+/* Student information section */
+.student-row {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  padding: 5px;
+  background-color: #f0f8ff;
+}
+
+.student-fields {
+  display: flex;
+  flex: 1;
+}
+
+.student-item {
+  flex: 1;
+  padding: 0 5px;
+}
+
+.student-item:first-child {
+  border-right: 1px solid #ccc;
+}
+
+/* Department table */
+.department-table {
+  margin: 15px 0;
+}
+
+.department-table table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #000;
+}
+
+.department-table th,
+.department-table td {
+  border: 1px solid #000;
+  padding: 8px;
+  text-align: left;
+  font-size: 14px;
+}
+
+.department-table th {
+  background-color: #f5f5f5;
+  font-weight: bold;
+}
+
+/* Internship topics */
+.form-field ol {
+  margin-left: 25px;
+  padding-left: 0;
+}
+
+.form-field ol li {
+  margin-bottom: 10px;
+}
+
+/* Meeting options */
+.meeting-options {
+  display: flex;
+  flex-direction: column;
+  margin-top: 15px;
+}
+
+.meeting-option {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.meeting-option input[type="checkbox"] {
+  margin-right: 10px;
+  width: auto;
+}
+
+/* Signature section */
+.signature-section {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.date-field {
+  width: 40%;
+}
+
+.signature-field {
+  width: 50%;
+  text-align: center;
+}
+
+.signature-box {
+  height: 80px;
+  border: 1px solid #ccc;
+  margin-top: 10px;
+}
+
+/* Form footer */
+.form-footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 20px;
+  font-size: 12px;
+  border-top: 1px solid #ccc;
+}
+
+.left-footer,
+.right-footer {
+  font-size: 12px;
+}
+
 /* Responsive design */
 @media (max-width: 768px) {
   .form-row {
@@ -448,6 +720,22 @@ h3 {
   .btn {
     margin-right: 0;
     margin-bottom: 1rem;
+  }
+
+  .official-form {
+    width: 100%;
+    min-height: auto;
+  }
+
+  .contact-row,
+  .student-row {
+    flex-direction: column;
+  }
+
+  .contact-item:not(:last-child),
+  .student-item:first-child {
+    border-right: none;
+    border-bottom: 1px solid #ccc;
   }
 }
 
@@ -495,9 +783,40 @@ h3 {
     color: black;
   }
 
-  /* Add border to the form for a better print layout */
-  .form-container {
-    border: 1px solid #999;
-    padding: 1cm;
+  /* Official Form print styles */
+  .official-form-container {
+    padding: 0;
+  }
+
+  .official-form {
+    width: 100%;
+    border: none;
+    box-shadow: none;
+  }
+
+  .form-field input,
+  .form-field textarea {
+    background-color: transparent !important;
+    border-bottom: 1px solid #000;
+  }
+
+  .contact-row,
+  .student-row {
+    background-color: transparent !important;
+  }
+
+  .department-table th {
+    background-color: transparent !important;
+  }
+
+  /* Hide form actions when printing */
+  .form-actions {
+    display: none !important;
+  }
+
+  /* Ensure proper page size for printing */
+  @page {
+    size: A4;
+    margin: 0;
   }
 }
