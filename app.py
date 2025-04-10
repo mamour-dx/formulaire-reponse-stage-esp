@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, redirect, url_for, flash, request
+from flask import Flask, render_template, redirect, url_for, flash, request, session
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
@@ -49,7 +49,7 @@ def register_routes(app):
     def index():
         """Home page route that displays the internship form."""
         form = InternshipFormSubmission()
-        return render_template('form.html', form=form, title='Internship Form Submission')
+        return render_template('form.html', form=form, title='Formulaire de Stage')
     
     @app.route('/submit', methods=['POST'])
     def submit_form():
@@ -61,61 +61,66 @@ def register_routes(app):
             internship_form = InternshipForm(
                 company_name=form.company_name.data,
                 company_address=form.company_address.data,
-                company_postal_code=form.company_postal_code.data,
-                company_city=form.company_city.data,
-                contact_name=form.contact_name.data,
-                contact_position=form.contact_position.data,
-                contact_email=form.contact_email.data,
                 contact_phone=form.contact_phone.data,
                 contact_fax=form.contact_fax.data,
-                internship_title=form.internship_title.data,
-                internship_description=form.internship_description.data,
-                internship_requirements=form.internship_requirements.data,
-                internship_start_date=form.internship_start_date.data,
-                internship_duration=form.internship_duration.data
+                contact_email=form.contact_email.data,
+                contact_name=form.contact_name.data,
+                contact_position=form.contact_position.data,
+                contact_phone_direct=form.contact_phone_direct.data,
+                contact_fax_direct=form.contact_fax_direct.data,
+                contact_email_direct=form.contact_email_direct.data,
+                student_name=form.student_name.data,
+                student_firstname=form.student_firstname.data,
+                internship_positions=form.internship_positions.data,
+                internship_topic1=form.internship_topic1.data,
+                internship_topic2=form.internship_topic2.data,
+                internship_topic3=form.internship_topic3.data,
+                wants_meeting=form.wants_meeting.data,
+                cannot_accept=form.cannot_accept.data,
+                signature_location=form.signature_location.data
             )
             
             # Save to database
             db.session.add(internship_form)
             db.session.commit()
             
-            flash('Internship form submitted successfully!', 'success')
+            flash('Formulaire de stage soumis avec succès!', 'success')
             return redirect(url_for('form_success', form_id=internship_form.id))
         
         # If form validation fails, return to the form with errors
-        flash('Please correct the errors in the form.', 'error')
-        return render_template('form.html', form=form, title='Internship Form Submission')
+        flash('Veuillez corriger les erreurs dans le formulaire.', 'error')
+        return render_template('form.html', form=form, title='Formulaire de Stage')
     
     @app.route('/success/<int:form_id>')
     def form_success(form_id):
         """Display success page after form submission."""
         form = InternshipForm.query.get_or_404(form_id)
-        return render_template('form_success.html', form=form, title='Submission Successful')
+        return render_template('form_success.html', form=form, title='Soumission Réussie')
     
     @app.route('/forms')
     def list_forms():
         """Display a list of all submitted internship forms."""
         forms = InternshipForm.query.order_by(InternshipForm.created_at.desc()).all()
-        return render_template('list_forms.html', forms=forms, title='Internship Forms')
+        return render_template('list_forms.html', forms=forms, title='Liste des Formulaires')
     
     @app.route('/forms/<int:form_id>')
     def view_form(form_id):
         """Display details of a specific internship form."""
         form = InternshipForm.query.get_or_404(form_id)
-        return render_template('view_form.html', form=form, title=f'Internship at {form.company_name}')
+        return render_template('view_form.html', form=form, title=f'Stage à {form.company_name}')
     
     @app.errorhandler(404)
     def page_not_found(e):
         """Handle 404 errors."""
-        return render_template('404.html', title='Page Not Found'), 404
+        return render_template('404.html', title='Page Non Trouvée'), 404
     
     @app.errorhandler(500)
     def internal_server_error(e):
         """Handle 500 errors."""
-        return render_template('500.html', title='Internal Server Error'), 500
+        return render_template('500.html', title='Erreur Interne du Serveur'), 500
 
 if __name__ == '__main__':
     # Get the environment configuration from an environment variable or default to development
     env = os.environ.get('FLASK_ENV', 'development')
     app = create_app(env)
-    app.run(host='0.0.0.0', port=5000) 
+    app.run(host='0.0.0.0', port=8080) 

@@ -17,131 +17,182 @@
 {% block content %}
 <div class="form-view-container">
     <div class="form-view-header">
-        <h2>{{ form.internship_title }}</h2>
-        <div class="form-view-company">{{ form.company_name }}</div>
+        <h2>{{ form.company_name }}</h2>
         <div class="form-view-meta">
-            <span class="form-view-date">Posted: {{ form.created_at.strftime('%d %B %Y') }}</span>
+            <span class="form-view-date">Soumis le: {{ form.created_at.strftime('%d %B %Y') }}</span>
             {% if form.is_approved %}
-                <span class="form-view-status approved">Approved</span>
+                <span class="form-view-status approved">Approuvé</span>
             {% else %}
-                <span class="form-view-status pending">Pending Approval</span>
+                <span class="form-view-status pending">En attente d'approbation</span>
             {% endif %}
         </div>
     </div>
     
     <div class="form-view-actions no-print">
-        <button type="button" class="btn btn-secondary" onclick="window.print()">Print This Internship</button>
-        <a href="{{ url_for('list_forms') }}" class="btn btn-outline">Back to List</a>
+        <button type="button" class="btn btn-secondary" onclick="printCurrentPage()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+                <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                <rect x="6" y="14" width="12" height="8"></rect>
+            </svg>
+            Imprimer cette page
+        </button>
+        <a href="{{ url_for('list_forms') }}" class="btn btn-outline">Retour à la liste</a>
     </div>
     
     <div class="form-view-content">
         <!-- Company Section -->
         <section class="section company-section">
-            <h3>Company Information</h3>
+            <h3>Informations sur l'Entreprise</h3>
             <div class="info-grid">
                 <div class="info-item">
-                    <span class="info-label">Company Name:</span>
+                    <span class="info-label">Nom de l'entreprise:</span>
                     <span class="info-value">{{ form.company_name }}</span>
                 </div>
                 <div class="info-item">
-                    <span class="info-label">Address:</span>
+                    <span class="info-label">Adresse:</span>
                     <span class="info-value">{{ form.company_address }}</span>
                 </div>
                 <div class="info-item">
-                    <span class="info-label">City:</span>
-                    <span class="info-value">{{ form.company_city }}</span>
+                    <span class="info-label">Téléphone:</span>
+                    <span class="info-value">{{ form.contact_phone }}</span>
                 </div>
+                {% if form.contact_fax %}
                 <div class="info-item">
-                    <span class="info-label">Postal Code:</span>
-                    <span class="info-value">{{ form.company_postal_code }}</span>
+                    <span class="info-label">Télécopie:</span>
+                    <span class="info-value">{{ form.contact_fax }}</span>
                 </div>
-            </div>
-        </section>
-        
-        <!-- Contact Section -->
-        <section class="section contact-section">
-            <h3>Contact Information</h3>
-            <div class="info-grid">
-                <div class="info-item">
-                    <span class="info-label">Contact Person:</span>
-                    <span class="info-value">{{ form.contact_name }}</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">Position:</span>
-                    <span class="info-value">{{ form.contact_position }}</span>
-                </div>
+                {% endif %}
                 <div class="info-item">
                     <span class="info-label">Email:</span>
                     <span class="info-value">
                         <a href="mailto:{{ form.contact_email }}">{{ form.contact_email }}</a>
                     </span>
                 </div>
+            </div>
+        </section>
+        
+        <!-- Contact Section -->
+        <section class="section contact-section">
+            <h3>Contact dans l'Entreprise</h3>
+            <div class="info-grid">
                 <div class="info-item">
-                    <span class="info-label">Phone:</span>
-                    <span class="info-value">{{ form.contact_phone }}</span>
+                    <span class="info-label">Nom:</span>
+                    <span class="info-value">{{ form.contact_name }}</span>
                 </div>
-                {% if form.contact_fax %}
                 <div class="info-item">
-                    <span class="info-label">Fax:</span>
-                    <span class="info-value">{{ form.contact_fax }}</span>
+                    <span class="info-label">Fonction:</span>
+                    <span class="info-value">{{ form.contact_position }}</span>
+                </div>
+                {% if form.contact_phone_direct %}
+                <div class="info-item">
+                    <span class="info-label">Téléphone direct:</span>
+                    <span class="info-value">{{ form.contact_phone_direct }}</span>
+                </div>
+                {% endif %}
+                {% if form.contact_fax_direct %}
+                <div class="info-item">
+                    <span class="info-label">Télécopie direct:</span>
+                    <span class="info-value">{{ form.contact_fax_direct }}</span>
+                </div>
+                {% endif %}
+                {% if form.contact_email_direct %}
+                <div class="info-item">
+                    <span class="info-label">Email direct:</span>
+                    <span class="info-value">
+                        <a href="mailto:{{ form.contact_email_direct }}">{{ form.contact_email_direct }}</a>
+                    </span>
                 </div>
                 {% endif %}
             </div>
         </section>
         
+        <!-- Student Section -->
+        {% if form.student_name or form.student_firstname %}
+        <section class="section student-section">
+            <h3>Étudiant Concerné</h3>
+            <div class="info-grid">
+                {% if form.student_name %}
+                <div class="info-item">
+                    <span class="info-label">Nom:</span>
+                    <span class="info-value">{{ form.student_name }}</span>
+                </div>
+                {% endif %}
+                {% if form.student_firstname %}
+                <div class="info-item">
+                    <span class="info-label">Prénoms:</span>
+                    <span class="info-value">{{ form.student_firstname }}</span>
+                </div>
+                {% endif %}
+            </div>
+        </section>
+        {% endif %}
+        
         <!-- Internship Details Section -->
         <section class="section internship-section">
-            <h3>Internship Details</h3>
+            <h3>Détails du Stage</h3>
             
-            <div class="internship-title-section">
-                <h4>{{ form.internship_title }}</h4>
-                
-                <div class="internship-meta">
-                    {% if form.internship_start_date %}
-                    <div class="internship-meta-item">
-                        <span class="meta-label">Start Date:</span>
-                        <span class="meta-value">{{ form.internship_start_date.strftime('%d %B %Y') }}</span>
-                    </div>
-                    {% endif %}
-                    
-                    {% if form.internship_duration %}
-                    <div class="internship-meta-item">
-                        <span class="meta-label">Duration:</span>
-                        <span class="meta-value">{{ form.internship_duration }}</span>
-                    </div>
-                    {% endif %}
+            <div class="internship-meta">
+                {% if form.internship_positions %}
+                <div class="internship-meta-item">
+                    <span class="meta-label">Nombre de positions:</span>
+                    <span class="meta-value">{{ form.internship_positions }}</span>
                 </div>
+                {% endif %}
             </div>
             
-            <div class="internship-description">
-                <h5>Description</h5>
-                <div class="description-content">
-                    {{ form.internship_description|nl2br }}
-                </div>
+            {% if form.internship_topic1 or form.internship_topic2 or form.internship_topic3 %}
+            <div class="internship-topics">
+                <h4>Sujets proposés:</h4>
+                <ol>
+                    {% if form.internship_topic1 %}
+                    <li>{{ form.internship_topic1 }}</li>
+                    {% endif %}
+                    {% if form.internship_topic2 %}
+                    <li>{{ form.internship_topic2 }}</li>
+                    {% endif %}
+                    {% if form.internship_topic3 %}
+                    <li>{{ form.internship_topic3 }}</li>
+                    {% endif %}
+                </ol>
+            </div>
+            {% endif %}
+            
+            <div class="internship-preferences">
+                <h4>Préférences:</h4>
+                <ul>
+                    <li>
+                        {% if form.wants_meeting %}
+                        <strong>✓</strong> Souhaite rencontrer un membre du département pour plus d'informations
+                        {% else %}
+                        <strong>✗</strong> Ne souhaite pas rencontrer un membre du département
+                        {% endif %}
+                    </li>
+                    <li>
+                        {% if form.cannot_accept %}
+                        <strong>✓</strong> Ne peut donner suite à la demande
+                        {% else %}
+                        <strong>✗</strong> Peut donner suite à la demande
+                        {% endif %}
+                    </li>
+                </ul>
             </div>
             
-            {% if form.internship_requirements %}
-            <div class="internship-requirements">
-                <h5>Requirements</h5>
-                <div class="requirements-content">
-                    {{ form.internship_requirements|nl2br }}
-                </div>
+            {% if form.signature_location %}
+            <div class="signature-info">
+                <p>Fait à: {{ form.signature_location }}</p>
             </div>
             {% endif %}
         </section>
         
-        <!-- Application Section -->
-        <section class="section application-section no-print">
-            <h3>How to Apply</h3>
+        <!-- Contact Instructions -->
+        <section class="section contact-instructions no-print">
+            <h3>Pour plus d'informations</h3>
             <p>
-                If you are interested in this internship opportunity, please contact 
-                <strong>{{ form.contact_name }}</strong> at 
+                Pour plus d'informations sur cette opportunité de stage, veuillez contacter 
+                <strong>{{ form.contact_name }}</strong> par email à 
                 <a href="mailto:{{ form.contact_email }}">{{ form.contact_email }}</a> 
-                or by phone at {{ form.contact_phone }}.
-            </p>
-            <p>
-                When applying, please mention that you found this opportunity through the 
-                Internship Form Portal.
+                ou par téléphone au {{ form.contact_phone }}.
             </p>
         </section>
     </div>
@@ -154,5 +205,10 @@
     document.addEventListener('DOMContentLoaded', function() {
         // For example, tracking views or adding interactive elements
     });
+    
+    // Print the current page
+    function printCurrentPage() {
+        window.print();
+    }
 </script>
 {% endblock %} 

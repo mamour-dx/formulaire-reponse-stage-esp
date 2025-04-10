@@ -3,61 +3,65 @@
 {% block content %}
 <div class="forms-list-container">
     <section class="page-header">
-        <h2>Available Internship Opportunities</h2>
+        <h2>Liste des Formulaires de Stage Soumis</h2>
         <p class="list-intro">
-            Below is a list of internship opportunities submitted by companies. Click on any internship
-            to view more details about the position and how to apply.
+            Voici la liste des formulaires de stage soumis par les entreprises. Cliquez sur un formulaire
+            pour voir les détails complets.
         </p>
     </section>
     
     {% if forms %}
         <div class="forms-filter">
-            <input type="text" id="searchInput" class="search-input" placeholder="Search by company, title, or description...">
+            <input type="text" id="searchInput" class="search-input" placeholder="Rechercher par nom d'entreprise...">
         </div>
         
         <div class="forms-list">
             {% for form in forms %}
-                <div class="form-card" data-company="{{ form.company_name }}" data-title="{{ form.internship_title }}">
+                <div class="form-card" data-company="{{ form.company_name }}" data-contact="{{ form.contact_name }}">
                     <div class="form-card-header">
-                        <h3 class="form-card-title">{{ form.internship_title }}</h3>
-                        <span class="form-card-company">{{ form.company_name }}</span>
+                        <h3 class="form-card-title">{{ form.company_name }}</h3>
+                        <span class="form-card-company">
+                            {% if form.internship_positions %}
+                                {{ form.internship_positions }} position(s) disponible(s)
+                            {% else %}
+                                Positions non spécifiées
+                            {% endif %}
+                        </span>
                     </div>
                     
                     <div class="form-card-body">
-                        <p class="form-card-description">
-                            {{ form.internship_description|truncate(150) }}
-                        </p>
-                        
                         <div class="form-card-details">
                             <div class="form-card-detail">
-                                <strong>Location:</strong> {{ form.company_city }}
+                                <strong>Contact:</strong> {{ form.contact_name }}
                             </div>
                             
-                            {% if form.internship_duration %}
-                                <div class="form-card-detail">
-                                    <strong>Duration:</strong> {{ form.internship_duration }}
-                                </div>
-                            {% endif %}
+                            <div class="form-card-detail">
+                                <strong>Email:</strong> {{ form.contact_email }}
+                            </div>
                             
-                            {% if form.internship_start_date %}
+                            <div class="form-card-detail">
+                                <strong>Téléphone:</strong> {{ form.contact_phone }}
+                            </div>
+                            
+                            {% if form.internship_topic1 %}
                                 <div class="form-card-detail">
-                                    <strong>Start Date:</strong> {{ form.internship_start_date.strftime('%d %b %Y') if form.internship_start_date else 'Flexible' }}
+                                    <strong>Sujet principal:</strong> {{ form.internship_topic1 }}
                                 </div>
                             {% endif %}
                         </div>
                     </div>
                     
                     <div class="form-card-footer">
-                        <a href="{{ url_for('view_form', form_id=form.id) }}" class="btn btn-sm">View Details</a>
-                        <span class="form-card-date">Posted: {{ form.created_at.strftime('%d %b %Y') }}</span>
+                        <a href="{{ url_for('view_form', form_id=form.id) }}" class="btn btn-sm">Voir les détails</a>
+                        <span class="form-card-date">Soumis le: {{ form.created_at.strftime('%d %b %Y') }}</span>
                     </div>
                 </div>
             {% endfor %}
         </div>
     {% else %}
         <div class="empty-state">
-            <p>No internship forms have been submitted yet.</p>
-            <p>If you are a company and would like to offer an internship, please <a href="{{ url_for('index') }}">submit a form</a>.</p>
+            <p>Aucun formulaire de stage n'a encore été soumis.</p>
+            <p>Si vous êtes une entreprise et souhaitez proposer un stage, veuillez <a href="{{ url_for('index') }}">soumettre un formulaire</a>.</p>
         </div>
     {% endif %}
 </div>
@@ -76,11 +80,11 @@
                 
                 formCards.forEach(function(card) {
                     const company = card.getAttribute('data-company').toLowerCase();
-                    const title = card.getAttribute('data-title').toLowerCase();
-                    const description = card.querySelector('.form-card-description').textContent.toLowerCase();
+                    const contact = card.getAttribute('data-contact').toLowerCase();
+                    const details = card.querySelector('.form-card-details').textContent.toLowerCase();
                     
-                    // Check if the search term is found in company name, title, or description
-                    if (company.includes(searchTerm) || title.includes(searchTerm) || description.includes(searchTerm)) {
+                    // Check if the search term is found in company name, contact name, or details
+                    if (company.includes(searchTerm) || contact.includes(searchTerm) || details.includes(searchTerm)) {
                         card.style.display = 'block';
                     } else {
                         card.style.display = 'none';

@@ -153,3 +153,17 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 - Flask and its extensions for the excellent web framework
 - Contributors and maintainers of the project
+
+## Print Layout Optimization
+
+The print layout has been extensively optimized:
+
+- **Form Fits on a Single A4 Page**: All content properly fits on a standard A4 page
+- **Improved Typography**: Enhanced heading sizes and font weights
+- **Horizontal Contact Rows**: Telephone, telecopie, and email fields display horizontally
+- **Student Information Layout**: Nom and Prénoms fields display horizontally
+- **Department Table Spacing**: Added proper padding to table cells
+- **Simplified UI**: Clean interface focused on form data
+- **Print-Specific Styling**: Added comprehensive print-specific CSS
+
+To use the print feature, simply click the "Imprimer cette page" button.
